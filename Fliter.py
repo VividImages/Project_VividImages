@@ -60,7 +60,9 @@ def Fliter(imgPath,fliterName):
         for imgName in imgPath:
             img = cv2.imread(imgName)
             res = Reminiscence(img)
-            outputImgList.append(res)    
+            outputImgList.append(res)  
+    elif fliterName == "":
+        pass
     else:
         pass
     
