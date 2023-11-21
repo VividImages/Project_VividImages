@@ -230,7 +230,8 @@ class Ui_MainWindow(object):
                 
             except:
                 QMessageBox.about(None,"错误","显示图片错误")
-            f.write(str(time.localtime())+": 拼接操作完成")
+            f=open(r'./history.log','a+')
+            f.write(str(time.localtime().tm_year)+"/"+str(time.localtime().tm_mon)+'/'+str(time.localtime().tm_mday)+" "+str(time.localtime().tm_hour)+":"+str(time.localtime().tm_min)+"   "+": 拼接操作完成")
         else:
             QMessageBox.about(None,"错误","请先加载图片")
             
@@ -254,7 +255,8 @@ class Ui_MainWindow(object):
                     resList = Fliter.Fliter(self.inputFileNameList,fliterName)
             except:
                 QMessageBox.about(None,"错误","滤镜处理失败！")
-            f.write(str(time.localtime())+"为图片进行"+str(fliterName)+"处理")
+            f=open(r'./history.log','a+')
+            f.write(str(time.localtime().tm_year)+"/"+str(time.localtime().tm_mon)+'/'+str(time.localtime().tm_mday)+" "+str(time.localtime().tm_hour)+":"+str(time.localtime().tm_min)+"   "+"为图片进行"+str(fliterName)+"滤镜处理\n\n")
             try:    
                 for i,img in enumerate(resList):
                     fileDir,ext = os.path.splitext(self.inputFileNameList[i])
@@ -267,8 +269,10 @@ class Ui_MainWindow(object):
                 QMessageBox.about(None,"错误","显示图片错误")        
         else:
             QMessageBox.about(None,"错误","请先加载图片")
-            
-        
+       
+    # 历史记录     
+    def historyLog(self):
+        pass    
         
 if __name__=="__main__":
     
