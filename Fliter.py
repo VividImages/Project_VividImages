@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 from scipy.interpolate import UnivariateSpline
 
-fliterList = ['Summer,Reminiscence']
+fliterList = ['Summer','Reminiscence','sketch']
 
 def LookupTable(x, y):
     spline = UnivariateSpline(x, y)
@@ -21,6 +21,7 @@ def Summer(img):
     res = cv2.merge((blue_channel, green_channel, red_channel ))
     return res
 
+# 有bug
 def Reminiscence(img):
     #获取图像行和列
 
@@ -43,6 +44,11 @@ def Reminiscence(img):
     res[i,j] = np.uint8((B, G, R))
     return res
 
+def sketch(img):
+    gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    edges = cv2.Canny(gray_image, 30, 100)
+    res = cv2.cvtColor(edges, cv2.COLOR_GRAY2BGR)
+    return res
 
 
 #@ 功能：对图片列表进行批量滤镜处理
@@ -61,8 +67,11 @@ def Fliter(imgPath,fliterName):
             img = cv2.imread(imgName)
             res = Reminiscence(img)
             outputImgList.append(res)  
-    elif fliterName == "":
-        pass
+    elif fliterName == "sketch":
+        for imgName in imgPath:
+            img = cv2.imread(imgName)
+            res = sketch(img)
+            outputImgList.append(res)  
     else:
         pass
     
