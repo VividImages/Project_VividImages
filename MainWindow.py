@@ -18,6 +18,7 @@ from PyQt5.QtWidgets import *
 import cv2
 import Stitch
 import FliterWindow
+import HistoryWindow
 import time
 import Fliter
 class Ui_MainWindow(object):
@@ -26,7 +27,7 @@ class Ui_MainWindow(object):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(737, 655)
         
-        apply_stylesheet(app, theme='light_blue.xml')
+        apply_stylesheet(app, theme='dark_cyan.xml')
         
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -38,7 +39,7 @@ class Ui_MainWindow(object):
         self.scrollArea = QtWidgets.QScrollArea(self.centralwidget)
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
-        self.scrollArea.setStyleSheet("border: 1px solid blue;") # 边框
+        self.scrollArea.setStyleSheet("border: 1px solid cyan;") # 边框
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
         self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 713, 268))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
@@ -72,7 +73,7 @@ class Ui_MainWindow(object):
         self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 604, 268))
         self.scrollAreaWidgetContents_2.setObjectName("scrollAreaWidgetContents_2")
         self.scrollArea_2.setWidget(self.scrollAreaWidgetContents_2)
-        self.scrollArea_2.setStyleSheet("border: 1px solid blue;") # 边框
+        self.scrollArea_2.setStyleSheet("border: 1px solid cyan;") # 边框
         self.formLayout_2.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.scrollArea_2)
         
         MainWindow.setCentralWidget(self.centralwidget)
@@ -101,6 +102,7 @@ class Ui_MainWindow(object):
         self.Button_LoadImg.clicked.connect(self.loadImg)
         self.Button_Stitch.clicked.connect(self.imgStitch)
         self.Button_Fliter.clicked.connect(self.imgFliter)
+        self.Button_History.clicked.connect(self.historyLog)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -231,7 +233,7 @@ class Ui_MainWindow(object):
             except:
                 QMessageBox.about(None,"错误","显示图片错误")
             f=open(r'./history.log','a+')
-            f.write(str(time.localtime().tm_year)+"/"+str(time.localtime().tm_mon)+'/'+str(time.localtime().tm_mday)+" "+str(time.localtime().tm_hour)+":"+str(time.localtime().tm_min)+"   "+": 拼接操作完成")
+            f.write(str(time.localtime().tm_year)+"/"+str(time.localtime().tm_mon)+'/'+str(time.localtime().tm_mday)+" "+str(time.localtime().tm_hour)+":"+str(time.localtime().tm_min)+"   "+": 拼接操作完成\n")
         else:
             QMessageBox.about(None,"错误","请先加载图片")
             
@@ -272,7 +274,13 @@ class Ui_MainWindow(object):
        
     # 历史记录     
     def historyLog(self):
-        pass    
+        try:
+            dialog = QDialog()
+            historyDialog = HistoryWindow.Ui_Dialog()
+            historyDialog.setupUi(dialog)
+            dialog.exec_()
+        except:
+            QMessageBox.warning(None,"错误","打开历史记录错误")    
         
 if __name__=="__main__":
     
