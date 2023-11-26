@@ -25,7 +25,7 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
         with open(r'./history.log', 'r') as f:
             for line in f.readlines():
-                self.textBrowser.append('<h1>'+line+'<h1>')
+                self.textBrowser.append('<h2>'+line+'<h2>')
                 
         
     def retranslateUi(self, Dialog):

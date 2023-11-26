@@ -21,6 +21,8 @@ import FliterWindow
 import HistoryWindow
 import time
 import Fliter
+import watermark
+import numpy as np
 class Ui_MainWindow(object):
 
     def setupUi(self, MainWindow):
@@ -103,6 +105,7 @@ class Ui_MainWindow(object):
         self.Button_Stitch.clicked.connect(self.imgStitch)
         self.Button_Fliter.clicked.connect(self.imgFliter)
         self.Button_History.clicked.connect(self.historyLog)
+        self.Button_Watermark.clicked.connect(self.watermark)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -274,6 +277,7 @@ class Ui_MainWindow(object):
        
     # 历史记录     
     def historyLog(self):
+        
         try:
             dialog = QDialog()
             historyDialog = HistoryWindow.Ui_Dialog()
@@ -281,7 +285,27 @@ class Ui_MainWindow(object):
             dialog.exec_()
         except:
             QMessageBox.warning(None,"错误","打开历史记录错误")    
-        
+    
+    def watermark(self):
+        if self.inputFileNameList:
+            try:
+                resList = watermark.watermark(self.inputFileNameList,"watermark_lean")
+            except:
+                QMessageBox.warning(None,"错误","添加水印错误")
+            f=open(r'./history.log','a+')
+            f.write(str(time.localtime().tm_year)+"/"+str(time.localtime().tm_mon)+'/'+str(time.localtime().tm_mday)+" "+str(time.localtime().tm_hour)+":"+str(time.localtime().tm_min)+"   "+"为图片进行水印处理\n")
+            try:    
+                for i,img in enumerate(resList):
+                    fileDir,ext = os.path.splitext(self.inputFileNameList[i])
+                    fileName = fileDir.split('/')[-1]
+                    fliePath = "./img/"+fileName+"_watermark"+".jpg"
+                    cv2.imwrite(fliePath,img)
+                    self.outputFileNameList.append(fliePath)
+                self.outputImgShow()
+            except:
+                QMessageBox.about(None,"错误","显示图片错误")   
+        else:
+            QMessageBox.about(None,"错误","请先加载图片")    
 if __name__=="__main__":
     
     if not os.path.exists("./img"):
